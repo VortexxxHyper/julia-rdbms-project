@@ -1,15 +1,10 @@
-using DataFrames
-using DBInterface
-using ODBC
+using DataFrames, DBInterface, ODBC
 
-# Define the DSN (Data Source Name) for the Access Database
-const DSN_NAME = "explore-access-odbc"  # Ensure this DSN exists in ODBC settings
+const DSN_NAME = "explore-access-odbc"
 
-# Establish a connection to the MS Access database
 conn = ODBC.Connection(DSN_NAME)
 
 try
-    # Drop the tables if they exist
     try
         DBInterface.execute(conn, "DROP TABLE Student")
     catch e
@@ -28,7 +23,6 @@ try
         println("Enrollment table does not exist, skipping DROP.")
     end
 
-    # 1. Create the Student table with AUTOINCREMENT instead of COUNTER
     try
         DBInterface.execute(conn, """
             CREATE TABLE Student (
@@ -42,7 +36,6 @@ try
         println("Error creating Student table: ", e)
     end
 
-    # 2. Create the Offering table
     try
         DBInterface.execute(conn, """
             CREATE TABLE Offering (
@@ -55,7 +48,6 @@ try
         println("Error creating Offering table: ", e)
     end
 
-    # 3. Create the Enrollment table
     try
         DBInterface.execute(conn, """
             CREATE TABLE Enrollment (
@@ -71,7 +63,6 @@ try
         println("Error creating Enrollment table: ", e)
     end
 
-    # 4. Insert data into the Student table (Don't specify ArmyNr as it's auto-generated)
     try
         DBInterface.execute(conn, "INSERT INTO Student (FirstName, LastName) VALUES ('Alice', 'Johnson');")
         DBInterface.execute(conn, "INSERT INTO Student (FirstName, LastName) VALUES ('Bob', 'Smith');")
@@ -82,7 +73,6 @@ try
         println("Error inserting data into Student table: ", e)
     end
 
-    # 5. Insert data into the Offering table (Don't specify CourseCode as it's auto-generated)
     try
         DBInterface.execute(conn, "INSERT INTO Offering (CourseName) VALUES ('Math');")
         DBInterface.execute(conn, "INSERT INTO Offering (CourseName) VALUES ('Physics');")
@@ -93,7 +83,6 @@ try
         println("Error inserting data into Offering table: ", e)
     end
 
-    # 6. Insert data into the Enrollment table (Don't specify EnrollmentID as it's auto-generated)
     try
         DBInterface.execute(conn, "INSERT INTO Enrollment (ArmyNr, CourseCode) VALUES (1, 1);")
         DBInterface.execute(conn, "INSERT INTO Enrollment (ArmyNr, CourseCode) VALUES (1, 2);")
@@ -108,7 +97,6 @@ try
         println("Error inserting data into Enrollment table: ", e)
     end
 
-    # 7. Retrieve and display data from the Student, Offering, and Enrollment tables
     try
         println("\n--- Student Table ---")
         students = DataFrame(DBInterface.execute(conn, "SELECT * FROM Student"))
@@ -134,8 +122,5 @@ try
     end
 
 finally
-    # Ensure the database connection is closed correctly
     DBInterface.close!(conn)
 end
-# Note: The above code assumes that the ODBC driver for MS Access is properly installed and configured on your system.
-# The DSN_NAME should match the name you set up in your ODBC Data Source Administrator.

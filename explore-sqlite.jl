@@ -1,12 +1,8 @@
-using DataFrames
-using SQLite
-using Tables
+using DataFrames, SQLite, Tables
 
-# Establish a connection to the SQLite database
 db = SQLite.DB("explore-sqlite.db")
 
 try
-    # 1. Create the Student table
     SQLite.execute(db, """
         CREATE TABLE IF NOT EXISTS Student (
             ArmyNr    INTEGER PRIMARY KEY,
@@ -15,7 +11,6 @@ try
         )
     """)
 
-    # 2. Create the Offering table
     SQLite.execute(db, """
         CREATE TABLE IF NOT EXISTS Offering (
             CourseCode INTEGER PRIMARY KEY,
@@ -23,7 +18,6 @@ try
         )
     """)
 
-    # 3. Create the Enrollment table
     SQLite.execute(db, """
         CREATE TABLE IF NOT EXISTS Enrollment (
             ArmyNr INTEGER,
@@ -33,7 +27,6 @@ try
         )
     """)
 
-    # 4. Insert data into the Student table
     SQLite.execute(db, """
         INSERT INTO Student (ArmyNr, FirstName, LastName) 
         VALUES 
@@ -43,7 +36,6 @@ try
             (4, 'Diana', 'Green')
     """)
 
-    # 5. Insert data into the Offering table
     SQLite.execute(db, """
         INSERT INTO Offering (CourseCode, CourseName) 
         VALUES 
@@ -53,7 +45,6 @@ try
             (104, 'Computer Science')
     """)
 
-    # 6. Insert data into the Enrollment table
     SQLite.execute(db, """
         INSERT INTO Enrollment (ArmyNr, CourseCode) 
         VALUES 
@@ -67,7 +58,6 @@ try
             (4, 103)
     """)
 
-    # 7. Optional: Display table using DataFrames in terminal as output
     println("Student Table:")
     students = DataFrame(DBInterface.execute(db, "SELECT * FROM Student"))
     println(students)
@@ -80,6 +70,5 @@ try
     enrollments = DataFrame(DBInterface.execute(db, "SELECT * FROM Enrollment"))
     println(enrollments)
 finally
-    # Ensure the database connection is always closed, even if an error occurs
     SQLite.close(db)
 end
