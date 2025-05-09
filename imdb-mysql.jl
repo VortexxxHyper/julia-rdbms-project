@@ -32,7 +32,6 @@ end
 println("Inserting data into MySQL...")
 @time begin
     DBInterface.execute(conn, "START TRANSACTION")
-    
     stmt = DBInterface.prepare(conn, """
         INSERT INTO name_basics (nconst, primaryName, birthYear, deathYear, primaryProfession, knownForTitles)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -44,7 +43,6 @@ println("Inserting data into MySQL...")
     
     DBInterface.execute(conn, "COMMIT")
 end
-
 
 println("Adding indexes...")
 @time DBInterface.execute(conn, "CREATE INDEX idx_primaryProfession ON name_basics(primaryProfession)")

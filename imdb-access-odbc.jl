@@ -12,7 +12,6 @@ const DSN_NAME = "imdb-access-odbc"
 
 conn = ODBC.Connection(DSN_NAME)
 
-
 println("Creating table...")
 @time begin
     try
@@ -38,7 +37,6 @@ batch_size = 100
 @time begin
     for i in 1:batch_size:size(df, 1)
         batch = df[i:min(i + batch_size - 1, size(df, 1)), :]
-
         sql = "INSERT INTO name_basics (nconst, primaryName, birthYear, deathYear, primaryProfession, knownForTitles) VALUES "
         values = []
         
@@ -49,13 +47,14 @@ batch_size = 100
             deathYear = isnothing(row.deathYear) || row.deathYear === missing ? "NULL" : string(parse(Int, String(row.deathYear)))
             primaryProfession = String(row.primaryProfession)
             knownForTitles = String(row.knownForTitles)
-
             push!(values, "('$nconst', '$primaryName', $birthYear, $deathYear, '$primaryProfession', '$knownForTitles')")
         end
-        
         sql *= join(values, ", ") * ";"
+
+        # Execute the dynamic SQL query
         DBInterface.execute(conn, sql)
 
+        # Commit after each batch of 100
         DBInterface.execute(conn, "COMMIT")
         
         println("Batch inserted and committed: Rows ", i, " to ", i + batch_size - 1)
