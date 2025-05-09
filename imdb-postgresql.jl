@@ -1,6 +1,6 @@
 using CSV, DataFrames, LibPQ, Dates
 
-println("Starting IMDb TSV import into SQLite...")
+println("Starting IMDb TSV import into PostgreSQL...")
 start_time = now()
 
 df = CSV.read("name.basics.clean.tsv", DataFrame; delim='\t')
