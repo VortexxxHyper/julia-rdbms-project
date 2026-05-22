@@ -1,0 +1,7 @@
+dev:
+  adapter: MySQL
+  host: 127.0.0.1
+  username: root
+  password: "162ssmw"         # or your actual password
+  database: searchlight_test
+  port: 3306

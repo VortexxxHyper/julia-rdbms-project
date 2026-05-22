@@ -1,0 +1,9 @@
+dev:
+  adapter: PostgreSQL
+  host: 127.0.0.1
+  username: postgres        # or your actual user (e.g. MSI)
+  password: "162ssmw"              # or your real password
+  database: searchlight_test
+  port: 5432
+  config:
+  # optional: sslmode: require

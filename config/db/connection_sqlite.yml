@@ -1,0 +1,3 @@
+dev:
+  adapter: SQLite
+  database: db/dev.sqlite3
